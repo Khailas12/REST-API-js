@@ -1,13 +1,14 @@
 const data = require('./data');
 
 class Controller {
-    async getTodos() {  // accessing all todos
+    async getTodos() {  // accessing all the data
+        // promise represents either completion or failure of a user task.
         return new Promise((resolve, _) => {
             resolve(data);
         });
     }
 
-    // accesing single todo
+    // read
     async getTodo(id) {
         return new Promise((resolve, reject) => {
             let todo = data.find((todo) => {
@@ -23,11 +24,11 @@ class Controller {
         });
     }
 
-    // creating
+    // create
     async createTodo(todo) {
         return new Promise((resolve, _) => {
             let newTodo = {
-                id: Math.floot(4 + Math.random() * 10),
+                id: Math.floor(4 + Math.random() * 10),
                 ...todo,
             };
             resolve(newTodo);   // returns the new created todo
@@ -43,7 +44,7 @@ class Controller {
             if (!todo) {    // if no todo
                 reject(`Todo with id ${id} unavailable`);
             }
-            todo['competed'] = true;    // updates in here
+            todo['completed'] = true;    // updates in here
             resolve(todo);  // returns the updated todo
         });
     }
