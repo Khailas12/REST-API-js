@@ -6,55 +6,94 @@ const PORT = process.env.PORT || 5000;
 const { getReqData } = require('./utils');
 
 
-const server = http.createServer(async (request, res) => {
+const server = http.createsServer(async (request, res) => {
     //  /api/todos : GET
     if (request.url === '/api/todos' && request.method === 'GET') {
         // read
-        const todos = await new todos().getTodos();
+        const todo = await new Todo().getTodos();
         res.writeHead(200, {
-            'Content-type': 'application/json'
+            'Content-Type': 'application/json'
         });
         res.end(JSON.stringify(todos));     // send data
     }
 
-    else if (request.url.match(/\/api\/([0-9]+)/) && request.method==='GET') {
+    //   /api/todos/:id : GET
+    else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method === 'GET') {
         try {
-            const id = request.url.split('/')[3];               // get id from url 
-            const todo = await new Todo().getTodos(id);
-            request.writeHead(200, {
-                'Content-type': 'application/json'
-            });
+            const id = request.url.split('/')[3];   // get id from url
+            const todo = await new Todo().getTodo(id);
+
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            });    
+            res.end(JSON.stringify(todo));  // send data
         }
-        catch(error) {
-            request.writeHead(404, {
-                'Content-type': 'application/json'
+        catch (error) {
+            res.writeHead(404, {
+                'Content-Type': 'application/json'
             });
-            request.end(JSON.stringify({ message: error }));
+            res.end(JSON.stringify({ message: error }));    // send the error
         }
     }
 
     // delete
-    else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method==='DELETE');
-    try {9
-        const id = request.url.split('/')[3];
-        let message = await new Todo().deleteTodo(id);
+    else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method === 'DELETE') {
+        try {
+            const id = request.url.split('/')[3];
+            let message = await new Todo().deleteTodo(id);
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            });
+            res.end(JSON.stringify({ message }));   // send msg
+        }
+        catch (error) {
+            res.writeHead(404, {
+                'Content-Type': 'application/json'
+            });
+            res.end(JSON.stringify({ message: error}));     // send error msg
+        }
+    }
+
+    // update
+    else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method === 'PATCH') {
+        try {
+            const id = request.url.split('/')[3];
+            let update_todo = await new Todo().updateTodo(id);
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            });
+            res.end(JSON.stringify(update_todo));    // send msg
+        }
+        catch (error) {
+            res.writeHead(404, {
+                'Content-Type': 'application/json'
+            });
+            res.end(JSON.stringify({ message: error }));    // send error msg
+        }
+    }
+
+    // post
+    else if (request.url == '/api/todos' && request.method === 'POST') {
+        let todoData = await getReqData(request);
+        let todo = await new Todo().createTodo(JSON.parse(todoData));
         res.writeHead(200, {
             'Content-Type': 'application/json'
         });
-        req.end(JSON.stringify({ message}));    // send message
-    } 
-    catch (error) {
+        res.end(JSON.stringify(todo));
+    }
+
+    // no route 
+    else {
         res.writeHead(404, {
             'Content-Type': 'application/json'
-        });     // send status code and content-type
-
-        res.end(JSON.stringify({ message: error }));    // send the error
+        });
+        res.end(JSON.stringify({ message: 'Route unavailable'}));
     }
-    
 });
 
-
-
+server.listen(PORT, () => {
+    console.log(`server started on port: ${PORT}`);
+});
 
 // this indicates when the server is up and running
 server.listen(PORT, () => {

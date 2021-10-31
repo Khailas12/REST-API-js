@@ -55,7 +55,7 @@ class Controller {
             let todo = data.find((todo) => todo.id === parseInt(id));
             
             if (!todo) {
-                return(`Todo with id ${id} unavailable`);
+                reject(`Todo with id ${id} unavailable`);
             }
             resolve('Todo deleted succesfully')
         });
