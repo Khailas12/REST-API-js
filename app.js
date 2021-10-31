@@ -1,12 +1,11 @@
 const http = require('http');
 const todos = require('./data');
-const todos = require('./data');
 const hostname = 'localhost';
 const PORT = process.env.PORT || 5000;
 const { getReqData } = require('./utils');
 
 
-const server = http.createsServer(async (request, res) => {
+const server = http.createServer(async (request, res) => {
     //  /api/todos : GET
     if (request.url === '/api/todos' && request.method === 'GET') {
         // read
@@ -91,9 +90,6 @@ const server = http.createsServer(async (request, res) => {
     }
 });
 
-server.listen(PORT, () => {
-    console.log(`server started on port: ${PORT}`);
-});
 
 // this indicates when the server is up and running
 server.listen(PORT, () => {
