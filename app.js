@@ -26,5 +26,5 @@ const server = http.createServer(async (req, res) => {
 
 // this indicates when the server is up and running
 server.listen(PORT, () => {
-    console.log(`Server running on PORT: ${hostname}:${PORT}`);
+    console.log(`Server running on PORT: http://${hostname}:${PORT}`);
 });
