@@ -1,5 +1,6 @@
 const http = require('http');
-const todos = require('./data');
+// const todos = require('./data');
+const Todo = require('./controller');
 const hostname = 'localhost';
 const PORT = process.env.PORT || 5000;
 const { getReqData } = require('./utils');
@@ -9,7 +10,7 @@ const server = http.createServer(async (request, res) => {
     //  /api/todos : GET
     if (request.url === '/api/todos' && request.method === 'GET') {
         // read
-        const todo = await new Todo().getTodos();
+        const todos = await new Todo().getTodos();
         res.writeHead(200, {
             'Content-Type': 'application/json'
         });
