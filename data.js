@@ -1,6 +1,6 @@
 // todo list
 
-const todo = [
+const todos = [
     {
         id: 1,
         title: "Coding",
@@ -30,4 +30,4 @@ const todo = [
     }
 ];
 
-module.exports = todo;
+module.exports = todos;
