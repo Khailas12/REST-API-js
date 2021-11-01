@@ -8,12 +8,10 @@ class Controller {
         });
     }
 
-    // read
+    // read a single item
     async getTodo(id) {
         return new Promise((resolve, reject) => {
-            let todo = data.find((todo) => {
-                todo.id === parseInt(id)
-            });
+            let todo = data.find((todo) => todo.id === parseInt(id));
 
             if (todo) {
                 resolve(todo);
@@ -32,7 +30,6 @@ class Controller {
                 ...todo,
             };
             resolve(newTodo);   // returns the new created todo
-
         });
     }
 
