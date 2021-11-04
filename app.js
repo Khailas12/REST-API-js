@@ -1,5 +1,4 @@
 const http = require('http');
-// const todos = require('./data');
 const Todo = require('./controller');
 const hostname = 'localhost';
 const PORT = process.env.PORT || 5000;
@@ -17,7 +16,17 @@ const server = http.createServer(async (request, res) => {
         res.end(JSON.stringify(todos));     // send data
     }
 
-    //   /api/todos/:id : GET
+    // create
+    else if (request.url == '/api/todos' && request.method === 'POST') {
+        let todoData = await getReqData(request);
+        let todo = await new Todo().createTodo(JSON.parse(todoData));
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.end(JSON.stringify(todo));
+    }
+
+    // read   /api/todos/:id : GET
     else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method === 'GET') {
         try {
             const id = request.url.split('/')[3];   // get id from url
@@ -35,25 +44,7 @@ const server = http.createServer(async (request, res) => {
             res.end(JSON.stringify({ message: error }));    // send the error
         }
     }
-
-    // delete
-    else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method === 'DELETE') {
-        try {
-            const id = request.url.split('/')[3];
-            let message = await new Todo().deleteTodo(id);
-            res.writeHead(200, {
-                'Content-Type': 'application/json'
-            });
-            res.end(JSON.stringify({ message }));   // send msg
-        }
-        catch (error) {
-            res.writeHead(404, {
-                'Content-Type': 'application/json'
-            });
-            res.end(JSON.stringify({ message: error}));     // send error msg
-        }
-    }
-
+    
     // update
     else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method === 'PATCH') {
         try {
@@ -71,15 +62,23 @@ const server = http.createServer(async (request, res) => {
             res.end(JSON.stringify({ message: error }));    // send error msg
         }
     }
-
-    // post
-    else if (request.url == '/api/todos' && request.method === 'POST') {
-        let todoData = await getReqData(request);
-        let todo = await new Todo().createTodo(JSON.parse(todoData));
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.end(JSON.stringify(todo));
+    
+    // delete
+    else if (request.url.match(/\/api\/todos\/([0-9]+)/) && request.method === 'DELETE') {
+        try {
+            const id = request.url.split('/')[3];
+            let message = await new Todo().deleteTodo(id);
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            });
+            res.end(JSON.stringify({ message }));   // send msg
+        }
+        catch (error) {
+            res.writeHead(404, {
+                'Content-Type': 'application/json'
+            });
+            res.end(JSON.stringify({ message: error}));     // send error msg
+        }
     }
 
     // no route 

@@ -7,8 +7,19 @@ class Controller {
             resolve(data);
         });
     }
+    
+    // create
+    async createTodo(todo) {
+        return new Promise((resolve, _) => {
+            let newTodo = {
+                id: Math.floor(4 + Math.random() * 10),
+                ...todo,
+            };
+            resolve(newTodo);   // returns the new created todo
+        });
+    }
 
-    // read a single item
+    // read 
     async getTodo(id) {
         return new Promise((resolve, reject) => {
             let todo = data.find((todo) => todo.id === parseInt(id));
@@ -22,18 +33,7 @@ class Controller {
         });
     }
 
-    // create
-    async createTodo(todo) {
-        return new Promise((resolve, _) => {
-            let newTodo = {
-                id: Math.floor(4 + Math.random() * 10),
-                ...todo,
-            };
-            resolve(newTodo);   // returns the new created todo
-        });
-    }
-
-    // updating
+    // update
     async updateTodo(id) {
         return new Promise((resolve, _) => {
             let todo = data.find((todo) => todo.id === parseInt(id));
@@ -46,7 +46,7 @@ class Controller {
         });
     }
 
-    // deleting
+    // delete
     async deleteTodo(id) {
         return new Promise((resolve, reject) => {
             let todo = data.find((todo) => todo.id === parseInt(id));
